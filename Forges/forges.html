@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forges - Estrela da Manhã</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0d0d0d;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .parent {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            gap: 12px;
+            height: calc(100vh - 40px);
+            max-width: 1800px;
+            margin: 0 auto;
+            background: #0d0d0d;
+            padding: 16px;
+            border-radius: 20px;
+        }
+
+        .card {
+            background: #1d1d1f;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-icon {
+            font-size: 18px;
+        }
+
+        .div1 {
+            grid-column: span 5 / span 5;
+        }
+
+        .div2 {
+            grid-row: span 8 / span 8;
+            grid-row-start: 2;
+        }
+
+        .div6 {
+            grid-row: span 2 / span 2;
+            grid-row-start: 2;
+        }
+
+        .div7 {
+            grid-row: span 2 / span 2;
+            grid-row-start: 2;
+        }
+
+        .div8 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 2;
+            grid-row-start: 4;
+        }
+
+        .div9 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 3;
+            grid-row-start: 4;
+        }
+
+        .div10 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 5;
+            grid-row-start: 4;
+        }
+
+        .div11 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 4;
+            grid-row-start: 2;
+        }
+
+        .div12 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 2;
+            grid-row-start: 6;
+        }
+
+        .div13 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 3;
+            grid-row-start: 6;
+        }
+
+        .div20 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 4;
+            grid-row-start: 4;
+        }
+
+        .div21 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 5;
+            grid-row-start: 2;
+        }
+
+        .div22 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 4;
+            grid-row-start: 6;
+        }
+
+        .div23 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 5;
+            grid-row-start: 6;
+        }
+
+        .menu-item-vertical {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .menu-item-vertical:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item-vertical:hover {
+            background: rgba(255,255,255,0.05);
+            padding-left: 32px;
+        }
+
+        .menu-item-vertical .menu-icon {
+            font-size: 28px;
+            filter: grayscale(20%);
+        }
+
+        .menu-item-vertical .menu-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #b8b9be;
+            text-transform: capitalize;
+        }
+
+        /* Checkbox Styles */
+        .forge-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .checkbox-wrapper-11 {
+            --text: #b8b9be;
+            --check: #5b7cff;
+            --disabled: #888;
+            --border-radius: 8px;
+            border-radius: var(--border-radius);
+            position: relative;
+            padding: 8px 10px;
+            display: grid;
+            grid-template-columns: 30px auto;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            transition: background 0.2s;
+        }
+
+        .checkbox-wrapper-11:hover {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .checkbox-wrapper-11 label {
+            color: var(--text);
+            position: relative;
+            cursor: pointer;
+            display: grid;
+            align-items: center;
+            width: fit-content;
+            transition: color 0.3s ease;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .checkbox-wrapper-11 label::before,
+        .checkbox-wrapper-11 label::after {
+            content: "";
+            position: absolute;
+        }
+
+        .checkbox-wrapper-11 label::before {
+            height: 2px;
+            width: 8px;
+            left: -27px;
+            background: var(--check);
+            border-radius: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .checkbox-wrapper-11 label:after {
+            height: 4px;
+            width: 4px;
+            top: 8px;
+            left: -25px;
+            border-radius: 50%;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: relative;
+            height: 15px;
+            width: 15px;
+            outline: none;
+            border: 0;
+            margin: 0 15px 0 0;
+            cursor: pointer;
+            display: grid;
+            align-items: center;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox]::before,
+        .checkbox-wrapper-11 input[type=checkbox]::after {
+            content: "";
+            position: absolute;
+            height: 2px;
+            top: auto;
+            background: var(--check);
+            border-radius: 2px;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox]::before {
+            width: 0px;
+            right: 60%;
+            transform-origin: right bottom;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox]::after {
+            width: 0px;
+            left: 40%;
+            transform-origin: left bottom;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox]:checked::before {
+            animation: check-01-11 0.4s ease forwards;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox]:checked::after {
+            animation: check-02-11 0.4s ease forwards;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox]:checked + label {
+            color: #ffffff;
+            font-weight: 600;
+            animation: move-11 0.3s ease 0.1s forwards;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox]:checked + label::before {
+            background: var(--disabled);
+            animation: slice-11 0.4s ease forwards;
+        }
+
+        .checkbox-wrapper-11 input[type=checkbox]:checked + label::after {
+            animation: firework-11 0.5s ease forwards 0.1s;
+        }
+
+        @keyframes move-11 {
+            50% {
+                padding-left: 8px;
+                padding-right: 0px;
+            }
+            100% {
+                padding-right: 4px;
+            }
+        }
+
+        @keyframes slice-11 {
+            60% {
+                width: 100%;
+                left: 4px;
+            }
+            100% {
+                width: 100%;
+                left: -2px;
+                padding-left: 0;
+            }
+        }
+
+        @keyframes check-01-11 {
+            0% {
+                width: 4px;
+                top: auto;
+                transform: rotate(0);
+            }
+            50% {
+                width: 0px;
+                top: auto;
+                transform: rotate(0);
+            }
+            51% {
+                width: 0px;
+                top: 8px;
+                transform: rotate(45deg);
+            }
+            100% {
+                width: 5px;
+                top: 8px;
+                transform: rotate(45deg);
+            }
+        }
+
+        @keyframes check-02-11 {
+            0% {
+                width: 4px;
+                top: auto;
+                transform: rotate(0);
+            }
+            50% {
+                width: 0px;
+                top: auto;
+                transform: rotate(0);
+            }
+            51% {
+                width: 0px;
+                top: 8px;
+                transform: rotate(-45deg);
+            }
+            100% {
+                width: 10px;
+                top: 8px;
+                transform: rotate(-45deg);
+            }
+        }
+
+        @keyframes firework-11 {
+            0% {
+                opacity: 1;
+                box-shadow: 0 0 0 -2px #5b7cff, 0 0 0 -2px #5b7cff, 0 0 0 -2px #5b7cff, 0 0 0 -2px #5b7cff, 0 0 0 -2px #5b7cff, 0 0 0 -2px #5b7cff;
+            }
+            30% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                box-shadow: 0 -15px 0 0px #5b7cff, 14px -8px 0 0px #5b7cff, 14px 8px 0 0px #5b7cff, 0 15px 0 0px #5b7cff, -14px 8px 0 0px #5b7cff, -14px -8px 0 0px #5b7cff;
+            }
+        }
+
+        .add-task-btn {
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: rgba(91,124,255,0.1);
+            border: 1px solid rgba(91,124,255,0.3);
+            border-radius: 6px;
+            color: #5b7cff;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .add-task-btn:hover {
+            background: rgba(91,124,255,0.2);
+            border-color: #5b7cff;
+            transform: translateY(-1px);
+        }
+
+        .add-task-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="div1 card" style="flex-direction: row; align-items: center; justify-content: space-between; padding: 16px 32px; background: #1d1d1f;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="font-size: 32px;">⭐</div>
+                <div>
+                    <h1 style="font-size: 24px; font-weight: 700; color: #ffffff; margin: 0;">Estrela da Manhã</h1>
+                    <p style="font-size: 12px; color: #86868b; margin: 2px 0 0 0; font-weight: 500;">Forges</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="display: flex; align-items: center; gap: 8px; color: #86868b; font-size: 13px;">
+                    <span>📅</span>
+                    <span id="currentDate"></span>
+                </div>
+                
+                <div style="position: relative; cursor: pointer;">
+                    <span style="font-size: 20px;">🔔</span>
+                    <div style="position: absolute; top: -4px; right: -4px; background: #5b7cff; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 600;">3</div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 12px; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">JD</div>
+                    <span style="font-size: 14px; font-weight: 600; color: #ffffff;">João Dev</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="div2 card" style="padding: 0; background: #1d1d1f;">
+            <div class="menu-item-vertical">
+                <div class="menu-icon">📅</div>
+                <div class="menu-label">Dailys</div>
+            </div>
+            <div class="menu-item-vertical" style="background: rgba(91,124,255,0.1);">
+                <div class="menu-icon">⚒️</div>
+                <div class="menu-label" style="color: #5b7cff;">Forges</div>
+            </div>
+            <div class="menu-item-vertical">
+                <div class="menu-icon">✨</div>
+                <div class="menu-label">Adds</div>
+            </div>
+            <div class="menu-item-vertical">
+                <div class="menu-icon">⛏️</div>
+                <div class="menu-label">Drills</div>
+            </div>
+            <div class="menu-item-vertical">
+                <div class="menu-icon">🐾</div>
+                <div class="menu-label">Pet</div>
+            </div>
+        </div>
+
+        <div class="div6 card" style="padding: 16px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 8px;">
+                <span class="card-icon">⚔️</span>
+                <span>Weapon</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="weapon-superior" type="checkbox">
+                    <label for="weapon-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="weapon-grade6" type="checkbox">
+                    <label for="weapon-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div7 card" style="padding: 16px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 8px;">
+                <span class="card-icon">🛡️</span>
+                <span>Armor</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="armor-superior" type="checkbox">
+                    <label for="armor-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="armor-grade6" type="checkbox">
+                    <label for="armor-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div11 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">👑</span>
+                <span>Helmet</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="helmet-superior" type="checkbox">
+                    <label for="helmet-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="helmet-grade6" type="checkbox">
+                    <label for="helmet-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div21 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">🥋</span>
+                <span>Belt</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="belt-superior" type="checkbox">
+                    <label for="belt-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="belt-grade6" type="checkbox">
+                    <label for="belt-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div8 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">📿</span>
+                <span>Amulet</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="amulet-superior" type="checkbox">
+                    <label for="amulet-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="amulet-grade6" type="checkbox">
+                    <label for="amulet-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div9 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">🛡️</span>
+                <span>Shield</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="shield-superior" type="checkbox">
+                    <label for="shield-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="shield-grade6" type="checkbox">
+                    <label for="shield-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div20 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">👢</span>
+                <span>Boots</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="boots-superior" type="checkbox">
+                    <label for="boots-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="boots-grade6" type="checkbox">
+                    <label for="boots-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div10 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">🧤</span>
+                <span>Gloves</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="gloves-superior" type="checkbox">
+                    <label for="gloves-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="gloves-grade6" type="checkbox">
+                    <label for="gloves-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div12 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">🦵</span>
+                <span>Sleeves</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="sleeves-superior" type="checkbox">
+                    <label for="sleeves-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="sleeves-grade6" type="checkbox">
+                    <label for="sleeves-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div13 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">👖</span>
+                <span>Leggings</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="leggings-superior" type="checkbox">
+                    <label for="leggings-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="leggings-grade6" type="checkbox">
+                    <label for="leggings-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div22 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">💍</span>
+                <span>Ring I</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="ring1-superior" type="checkbox">
+                    <label for="ring1-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="ring1-grade6" type="checkbox">
+                    <label for="ring1-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+
+        <div class="div23 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 4px;">
+                <span class="card-icon">💍</span>
+                <span>Ring II</span>
+            </div>
+            <div class="forge-checkboxes">
+                <div class="checkbox-wrapper-11">
+                    <input id="ring2-superior" type="checkbox">
+                    <label for="ring2-superior">Superior</label>
+                </div>
+                <div class="checkbox-wrapper-11">
+                    <input id="ring2-grade6" type="checkbox">
+                    <label for="ring2-grade6">Grade 6</label>
+                </div>
+            </div>
+            <button class="add-task-btn">
+                <span>+</span>
+                <span>Adicionar</span>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('pt-BR', options);
+            const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('currentDate').textContent = `${dateStr} • ${timeStr}`;
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>

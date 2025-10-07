@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Estrela da Manhã</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0d0d0d;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        /* Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(91, 124, 255, 0.3);
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(91, 124, 255, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background: rgba(91, 124, 255, 0.7);
+        }
+
+        /* Firefox Scrollbar */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(91, 124, 255, 0.3) rgba(255, 255, 255, 0.03);
+        }
+
+        .parent {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            gap: 12px;
+            height: calc(100vh - 40px);
+            max-width: 1800px;
+            margin: 0 auto;
+            background: #0d0d0d;
+            padding: 16px;
+            border-radius: 20px;
+        }
+
+        .card {
+            background: #1d1d1f;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: #86868b;
+        }
+
+        .trend {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .trend.up {
+            background: rgba(10, 112, 41, 0.2);
+            color: #4ade80;
+        }
+
+        .trend.down {
+            background: rgba(215, 0, 21, 0.2);
+            color: #f87171;
+        }
+
+        .div1 {
+            grid-column: span 3 / span 3;
+        }
+
+        .div2 {
+            grid-row: span 8 / span 8;
+            grid-column-start: 1;
+            grid-row-start: 2;
+        }
+
+        .div4 {
+            grid-column: span 2 / span 2;
+            grid-row: span 3 / span 3;
+            grid-column-start: 4;
+            grid-row-start: 1;
+        }
+
+        .div6 {
+            grid-row: span 3 / span 3;
+            grid-row-start: 2;
+        }
+
+        .div7 {
+            grid-row: span 3 / span 3;
+            grid-row-start: 2;
+        }
+
+        .div8 {
+            grid-row: span 3 / span 3;
+            grid-column-start: 2;
+            grid-row-start: 5;
+        }
+
+        .div9 {
+            grid-row: span 3 / span 3;
+            grid-column-start: 3;
+            grid-row-start: 5;
+        }
+
+        .div10 {
+            grid-row: span 3 / span 3;
+            grid-column-start: 5;
+            grid-row-start: 4;
+        }
+
+        .div11 {
+            grid-row: span 3 / span 3;
+            grid-column-start: 4;
+            grid-row-start: 4;
+        }
+
+        .div12 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 2;
+            grid-row-start: 6;
+        }
+
+        .div13 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 3;
+            grid-row-start: 6;
+        }
+
+        .div14 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 2;
+            grid-row-start: 8;
+        }
+
+        .div15 {
+            grid-row: span 2 / span 2;
+            grid-column-start: 3;
+            grid-row-start: 8;
+        }
+
+        .div16 {
+            grid-row: span 3 / span 3;
+            grid-column-start: 4;
+            grid-row-start: 7;
+        }
+
+        /* Altar Styles */
+        .altar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            max-height: calc(100% - 40px);
+        }
+
+        .altar-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.2s;
+        }
+
+        .altar-item:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(91,124,255,0.3);
+        }
+
+        .altar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
+        .altar-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            text-transform: capitalize;
+        }
+
+        .altar-attribute {
+            font-size: 10px;
+            color: #86868b;
+            font-weight: 500;
+            margin-top: 1px;
+        }
+
+        .altar-level {
+            font-size: 10px;
+            font-weight: 700;
+            color: #5b7cff;
+            padding: 2px 6px;
+            background: rgba(91,124,255,0.15);
+            border-radius: 3px;
+        }
+
+        .altar-level.max {
+            color: #ffd700;
+            background: rgba(255,215,0,0.15);
+        }
+
+        .altar-progress-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .altar-progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .altar-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5b7cff 0%, #00c7be 100%);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .altar-progress-fill.max {
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+        }
+
+        .altar-up-btn {
+            padding: 3px 8px;
+            background: rgba(74, 222, 128, 0.15);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 3px;
+            color: #4ade80;
+            font-size: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .altar-up-btn:hover {
+            background: rgba(74, 222, 128, 0.25);
+            border-color: #4ade80;
+            transform: translateY(-1px);
+        }
+
+        .altar-up-btn:active {
+            transform: translateY(0);
+        }
+
+        .altar-max-badge {
+            padding: 3px 8px;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 3px;
+            color: #ffd700;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .div17 {
+            grid-row: span 3 / span 3;
+            grid-column-start: 5;
+            grid-row-start: 7;
+        }
+
+        .menu-item-vertical {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .menu-item-vertical:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item-vertical:hover {
+            background: rgba(255,255,255,0.05);
+            padding-left: 32px;
+        }
+
+        .menu-item-vertical.active {
+            background: rgba(91,124,255,0.1);
+        }
+
+        .menu-item-vertical .menu-icon {
+            font-size: 28px;
+            filter: grayscale(20%);
+        }
+
+        .menu-item-vertical .menu-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #b8b9be;
+            text-transform: capitalize;
+        }
+
+        .menu-item-vertical.active .menu-label {
+            color: #5b7cff;
+        }
+
+        .events-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .event-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .event-item:hover {
+            border-color: #5b7cff;
+            background: rgba(91,124,255,0.1);
+        }
+
+        .event-time {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .event-name {
+            font-size: 11px;
+            font-weight: 400;
+            color: #86868b;
+            line-height: 1.3;
+        }
+
+        /* Clan Notices Styles */
+        .clan-notices {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            max-height: calc(100% - 40px);
+        }
+
+        .notice-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid;
+            transition: all 0.2s;
+        }
+
+        .notice-item:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateX(4px);
+        }
+
+        .notice-item.priority {
+            border-left-color: #ff3b30;
+        }
+
+        .notice-item.treasure {
+            border-left-color: #5b7cff;
+        }
+
+        .notice-item.celebration {
+            border-left-color: #ffd60a;
+        }
+
+        .notice-item.battle {
+            border-left-color: #ff9500;
+        }
+
+        .notice-badge {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notice-body {
+            flex: 1;
+        }
+
+        .notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .notice-author {
+            font-size: 11px;
+            font-weight: 600;
+            color: #5b7cff;
+        }
+
+        .notice-time {
+            font-size: 10px;
+            color: #86868b;
+        }
+
+        .notice-content {
+            font-size: 12px;
+            color: #b8b9be;
+            line-height: 1.4;
+        }
+
+        /* Boss Hunt Styles */
+        .boss-hunt-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            max-height: calc(100% - 40px);
+        }
+
+        .boss-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.2s;
+            gap: 8px;
+        }
+
+        .boss-item:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .boss-item.available {
+            border-color: rgba(74, 222, 128, 0.3);
+            background: rgba(74, 222, 128, 0.05);
+        }
+
+        .boss-item.available:hover {
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .boss-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+            flex: 1;
+        }
+
+        .boss-timer {
+            font-size: 11px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .boss-timer.available {
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        .boss-kill-btn {
+            padding: 4px 10px;
+            background: rgba(74, 222, 128, 0.15);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 4px;
+            color: #4ade80;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .boss-kill-btn:hover {
+            background: rgba(74, 222, 128, 0.25);
+            border-color: #4ade80;
+            transform: translateY(-1px);
+        }
+
+        .boss-kill-btn:active {
+            transform: translateY(0);
+        }
+
+        .boss-reset-btn {
+            padding: 4px 10px;
+            background: rgba(255, 149, 0, 0.15);
+            border: 1px solid rgba(255, 149, 0, 0.3);
+            border-radius: 4px;
+            color: #ff9500;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .boss-reset-btn:hover {
+            background: rgba(255, 149, 0, 0.25);
+            border-color: #ff9500;
+            transform: translateY(-1px);
+        }
+
+        .boss-reset-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Blacklist Styles */
+        .blacklist-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            max-height: calc(100% - 40px);
+        }
+
+        .blacklist-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.2s;
+        }
+
+        .blacklist-item:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: #ff3b30;
+        }
+
+        .enemy-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+            flex: 1;
+        }
+
+        .separator {
+            color: #86868b;
+            font-size: 11px;
+        }
+
+        .enemy-class {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .enemy-class.champion {
+            background: rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+        }
+
+        .enemy-class.mage {
+            background: rgba(91, 124, 255, 0.15);
+            color: #5b7cff;
+        }
+
+        .enemy-class.warrior {
+            background: rgba(255, 59, 48, 0.15);
+            color: #ff3b30;
+        }
+
+        .enemy-class.priest {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1d1d1f;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(91, 124, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            color: #86868b;
+            font-size: 24px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #ffffff;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #b8b9be;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #5b7cff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-select {
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 14px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #5b7cff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-select option {
+            background: #1d1d1f;
+            color: #ffffff;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-btn-cancel {
+            background: rgba(255, 255, 255, 0.05);
+            color: #b8b9be;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        .modal-btn-submit {
+            background: #5b7cff;
+            color: #ffffff;
+        }
+
+        .modal-btn-submit:hover {
+            background: #4a6de6;
+            transform: translateY(-1px);
+        }
+
+        .modal-btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .blacklist-add-btn {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: rgba(91, 124, 255, 0.15);
+            border: 1px solid rgba(91, 124, 255, 0.3);
+            border-radius: 6px;
+            color: #5b7cff;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .blacklist-add-btn:hover {
+            background: rgba(91, 124, 255, 0.25);
+            border-color: #5b7cff;
+            transform: translateY(-1px);
+        }
+
+        .blacklist-add-btn:active {
+            transform: translateY(0);
+        }
+
+        .blacklist-item .delete-btn {
+            opacity: 0;
+            padding: 2px 6px;
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            border-radius: 3px;
+            color: #ff3b30;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 8px;
+        }
+
+        .blacklist-item:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .blacklist-item .delete-btn:hover {
+            background: rgba(255, 59, 48, 0.25);
+            border-color: #ff3b30;
+        }
+
+        /* Kick List Styles */
+        .kick-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            max-height: calc(100% - 70px);
+        }
+
+        .kick-member-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: rgba(255, 59, 48, 0.05);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            transition: all 0.2s;
+        }
+
+        .kick-member-item:hover {
+            background: rgba(255, 59, 48, 0.1);
+            border-color: rgba(255, 59, 48, 0.4);
+        }
+
+        .kick-member-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .kick-member-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .kick-member-reason {
+            font-size: 9px;
+            color: #ff9999;
+        }
+
+        .kick-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .kick-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border: 1px solid;
+        }
+
+        .kick-btn-remove {
+            background: rgba(255, 59, 48, 0.15);
+            border-color: rgba(255, 59, 48, 0.3);
+            color: #ff3b30;
+        }
+
+        .kick-btn-remove:hover {
+            background: rgba(255, 59, 48, 0.25);
+            border-color: #ff3b30;
+        }
+
+        .kick-btn-keep {
+            background: rgba(74, 222, 128, 0.15);
+            border-color: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+
+        .kick-btn-keep:hover {
+            background: rgba(74, 222, 128, 0.25);
+            border-color: #4ade80;
+        }
+
+        .kick-add-btn {
+            margin-top: 8px;
+            padding: 6px 10px;
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            border-radius: 6px;
+            color: #ff3b30;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kick-add-btn:hover {
+            background: rgba(255, 59, 48, 0.25);
+            border-color: #ff3b30;
+            transform: translateY(-1px);
+        }
+
+        .kick-add-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="div1 card" style="flex-direction: row; align-items: center; justify-content: space-between; padding: 16px 32px; background: #1d1d1f;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="font-size: 32px;">⭐</div>
+                <div>
+                    <h1 style="font-size: 24px; font-weight: 700; color: #ffffff; margin: 0;">Estrela da Manhã</h1>
+                    <p style="font-size: 12px; color: #86868b; margin: 2px 0 0 0; font-weight: 500;">Dashboard</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="display: flex; align-items: center; gap: 8px; color: #86868b; font-size: 13px;">
+                    <span>📅</span>
+                    <span id="currentDate"></span>
+                </div>
+                
+                <div style="position: relative; cursor: pointer;">
+                    <span style="font-size: 20px;">🔔</span>
+                    <div style="position: absolute; top: -4px; right: -4px; background: #5b7cff; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 600;">3</div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 12px; border-radius: 8px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">JD</div>
+                    <span style="font-size: 14px; font-weight: 600; color: #ffffff;">João Dev</span>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            function updateDateTime() {
+                const now = new Date();
+                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                const dateStr = now.toLocaleDateString('pt-BR', options);
+                const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('currentDate').textContent = `${dateStr} • ${timeStr}`;
+            }
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        </script>
+
+        <div class="div2 card" style="padding: 0; background: #1d1d1f;">
+            <div class="menu-item-vertical active">
+                <div class="menu-icon">📅</div>
+                <div class="menu-label">Dailys</div>
+            </div>
+            <div class="menu-item-vertical">
+                <div class="menu-icon">⚒️</div>
+                <div class="menu-label">Forges</div>
+            </div>
+            <div class="menu-item-vertical">
+                <div class="menu-icon">✨</div>
+                <div class="menu-label">Adds</div>
+            </div>
+            <div class="menu-item-vertical">
+                <div class="menu-icon">⛏️</div>
+                <div class="menu-label">Drills</div>
+            </div>
+            <div class="menu-item-vertical">
+                <div class="menu-icon">🐾</div>
+                <div class="menu-label">Pet</div>
+            </div>
+        </div>
+
+        <div class="div4 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 10px;">Eventos</div>
+            <div class="events-container">
+                <div class="event-item">
+                    <div class="event-time">14:00</div>
+                    <div class="event-name">Boss Mundial</div>
+                </div>
+                <div class="event-item">
+                    <div class="event-time">18:00</div>
+                    <div class="event-name">Guerra de Guildas</div>
+                </div>
+                <div class="event-item">
+                    <div class="event-time">20:00</div>
+                    <div class="event-name">Raid Noturna</div>
+                </div>
+                <div class="event-item">
+                    <div class="event-time">22:00</div>
+                    <div class="event-name">Invasão</div>
+                </div>
+                <div class="event-item">
+                    <div class="event-time">23:30</div>
+                    <div class="event-name">Defesa do Reino</div>
+                </div>
+                <div class="event-item">
+                    <div class="event-time">00:00</div>
+                    <div class="event-name">Reset Diário</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="div6 card" style="background: #1d1d1f;">
+            <div class="card-title">Clientes</div>
+            <div class="card-value">3.847</div>
+            <span class="trend up">↑ 8.2%</span>
+        </div>
+
+        <div class="div7 card" style="background: #1d1d1f;">
+            <div class="card-title">Conversão</div>
+            <div class="card-value">4.8%</div>
+            <span class="trend up">↑ 0.3%</span>
+        </div>
+
+        <div class="div8 card" style="background: #1d1d1f;">
+            <div class="card-title">Ticket Médio</div>
+            <div class="card-value">R$ 387</div>
+            <span class="trend down">↓ 2.1%</span>
+        </div>
+
+        <div class="div9 card" style="background: #1d1d1f; padding: 16px;">
+            <div class="card-title" style="margin-bottom: 10px;">Status da Guilda</div>
+            <div style="display: flex; flex-direction: column; gap: 10px; height: calc(100% - 34px); justify-content: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: 6px; border-left: 3px solid #4ade80;">
+                    <span style="font-size: 12px; color: #ffffff; font-weight: 600;">XP da Guilda</span>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 1px;">
+                        <span style="font-size: 11px; color: #4ade80; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Ativo</span>
+                        <span style="font-size: 9px; color: #86868b; font-weight: 500;">4 horas</span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: 6px; border-left: 3px solid #f87171;">
+                    <span style="font-size: 12px; color: #ffffff; font-weight: 600;">TP da Guilda</span>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 1px;">
+                        <span style="font-size: 11px; color: #f87171; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Inativo</span>
+                        <span style="font-size: 9px; color: #86868b; font-weight: 500;">2 horas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="div10 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 10px;">📢 Avisos do Clã</div>
+            <div class="clan-notices">
+                <div class="notice-item priority">
+                    <div class="notice-badge">🔥</div>
+                    <div class="notice-body">
+                        <div class="notice-header">
+                            <span class="notice-author">Líder</span>
+                            <span class="notice-time">2h</span>
+                        </div>
+                        <div class="notice-content">Raid de guilda amanhã às 20h. Todos presentes!</div>
+                    </div>
+                </div>
+                <div class="notice-item treasure">
+                    <div class="notice-badge">💎</div>
+                    <div class="notice-body">
+                        <div class="notice-header">
+                            <span class="notice-author">Vice</span>
+                            <span class="notice-time">5h</span>
+                        </div>
+                        <div class="notice-content">Doações semanais abertas no armazém.</div>
+                    </div>
+                </div>
+                <div class="notice-item celebration">
+                    <div class="notice-badge">🎉</div>
+                    <div class="notice-body">
+                        <div class="notice-header">
+                            <span class="notice-author">Oficial</span>
+                            <span class="notice-time">1d</span>
+                        </div>
+                        <div class="notice-content">Bem-vindos novos membros: DarkKnight, Mage47!</div>
+                    </div>
+                </div>
+                <div class="notice-item battle">
+                    <div class="notice-badge">⚔️</div>
+                    <div class="notice-body">
+                        <div class="notice-header">
+                            <span class="notice-author">Líder</span>
+                            <span class="notice-time">2d</span>
+                        </div>
+                        <div class="notice-content">Guerra de territórios sábado. Estratégia em reunião.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="div11 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 10px;">Boss Hunt</div>
+            <div class="boss-hunt-container">
+                <div class="boss-item available" data-boss="dragao">
+                    <div class="boss-name">Dragão Ancião</div>
+                    <div class="boss-timer available">Disponível</div>
+                    <button class="boss-kill-btn" onclick="killBoss('dragao', 240)">Matar</button>
+                </div>
+                <div class="boss-item cooldown" data-boss="oni">
+                    <div class="boss-name">Oni Vermelho</div>
+                    <div class="boss-timer">1h 23m</div>
+                    <button class="boss-reset-btn" onclick="resetBossManual('oni')">Reset</button>
+                </div>
+                <div class="boss-item cooldown" data-boss="escorpiao">
+                    <div class="boss-name">Escorpião Negro</div>
+                    <div class="boss-timer">2h 45m</div>
+                    <button class="boss-reset-btn" onclick="resetBossManual('escorpiao')">Reset</button>
+                </div>
+                <div class="boss-item available" data-boss="lobo">
+                    <div class="boss-name">Lobo Sombrio</div>
+                    <div class="boss-timer available">Disponível</div>
+                    <button class="boss-kill-btn" onclick="killBoss('lobo', 180)">Matar</button>
+                </div>
+                <div class="boss-item cooldown" data-boss="hydra">
+                    <div class="boss-name">Hydra Gélida</div>
+                    <div class="boss-timer">45m</div>
+                    <button class="boss-reset-btn" onclick="resetBossManual('hydra')">Reset</button>
+                </div>
+                <div class="boss-item cooldown" data-boss="tita">
+                    <div class="boss-name">Titã de Ferro</div>
+                    <div class="boss-timer">3h 12m</div>
+                    <button class="boss-reset-btn" onclick="resetBossManual('tita')">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Sistema de Boss Hunt
+            const bossTimers = {};
+            const bossIntervals = {};
+            
+            function killBoss(bossId, cooldownMinutes) {
+                const bossItem = document.querySelector(`[data-boss="${bossId}"]`);
+                const timerElement = bossItem.querySelector('.boss-timer');
+                const killBtn = bossItem.querySelector('.boss-kill-btn');
+                
+                // Remove classe available e botão
+                bossItem.classList.remove('available');
+                bossItem.classList.add('cooldown');
+                if (killBtn) killBtn.remove();
+                
+                // Define o tempo de cooldown
+                const endTime = Date.now() + (cooldownMinutes * 60 * 1000);
+                bossTimers[bossId] = endTime;
+                
+                // Salva no localStorage
+                localStorage.setItem('bossTimers', JSON.stringify(bossTimers));
+                
+                // Adiciona botão reset
+                const resetBtn = document.createElement('button');
+                resetBtn.className = 'boss-reset-btn';
+                resetBtn.textContent = 'Reset';
+                resetBtn.onclick = () => resetBossManual(bossId);
+                bossItem.appendChild(resetBtn);
+                
+                // Inicia contagem regressiva
+                updateBossTimer(bossId, timerElement, endTime);
+            }
+            
+            function updateBossTimer(bossId, timerElement, endTime) {
+                // Limpa interval anterior se existir
+                if (bossIntervals[bossId]) {
+                    clearInterval(bossIntervals[bossId]);
+                }
+                
+                bossIntervals[bossId] = setInterval(() => {
+                    const now = Date.now();
+                    const remaining = endTime - now;
+                    
+                    if (remaining <= 0) {
+                        clearInterval(bossIntervals[bossId]);
+                        delete bossIntervals[bossId];
+                        resetBoss(bossId);
+                    } else {
+                        const hours = Math.floor(remaining / (1000 * 60 * 60));
+                        const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                        
+                        timerElement.textContent = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+                        timerElement.classList.remove('available');
+                    }
+                }, 1000);
+            }
+            
+            function resetBossManual(bossId) {
+                // Limpa o interval
+                if (bossIntervals[bossId]) {
+                    clearInterval(bossIntervals[bossId]);
+                    delete bossIntervals[bossId];
+                }
+                resetBoss(bossId);
+            }
+            
+            function resetBoss(bossId) {
+                const bossItem = document.querySelector(`[data-boss="${bossId}"]`);
+                const timerElement = bossItem.querySelector('.boss-timer');
+                const resetBtn = bossItem.querySelector('.boss-reset-btn');
+                
+                // Remove botão reset se existir
+                if (resetBtn) resetBtn.remove();
+                
+                // Adiciona classe available
+                bossItem.classList.remove('cooldown');
+                bossItem.classList.add('available');
+                
+                // Atualiza texto
+                timerElement.textContent = 'Disponível';
+                timerElement.classList.add('available');
+                
+                // Adiciona botão de matar
+                const cooldownTimes = {
+                    'dragao': 240,
+                    'oni': 180,
+                    'escorpiao': 240,
+                    'lobo': 180,
+                    'hydra': 120,
+                    'tita': 300
+                };
+                
+                const btn = document.createElement('button');
+                btn.className = 'boss-kill-btn';
+                btn.textContent = 'Matar';
+                btn.onclick = () => killBoss(bossId, cooldownTimes[bossId]);
+                bossItem.appendChild(btn);
+                
+                // Remove do storage
+                delete bossTimers[bossId];
+                localStorage.setItem('bossTimers', JSON.stringify(bossTimers));
+            }
+            
+            // Carrega timers salvos ao iniciar
+            function loadBossTimers() {
+                const saved = localStorage.getItem('bossTimers');
+                if (saved) {
+                    const timers = JSON.parse(saved);
+                    const now = Date.now();
+                    
+                    Object.keys(timers).forEach(bossId => {
+                        const endTime = timers[bossId];
+                        if (endTime > now) {
+                            const bossItem = document.querySelector(`[data-boss="${bossId}"]`);
+                            const timerElement = bossItem.querySelector('.boss-timer');
+                            const killBtn = bossItem.querySelector('.boss-kill-btn');
+                            
+                            bossItem.classList.remove('available');
+                            bossItem.classList.add('cooldown');
+                            if (killBtn) killBtn.remove();
+                            
+                            // Adiciona botão reset
+                            const resetBtn = document.createElement('button');
+                            resetBtn.className = 'boss-reset-btn';
+                            resetBtn.textContent = 'Reset';
+                            resetBtn.onclick = () => resetBossManual(bossId);
+                            bossItem.appendChild(resetBtn);
+                            
+                            bossTimers[bossId] = endTime;
+                            updateBossTimer(bossId, timerElement, endTime);
+                        } else {
+                            resetBoss(bossId);
+                        }
+                    });
+                }
+            }
+            
+            // Carrega timers ao iniciar
+            loadBossTimers();
+        </script>
+
+        <div class="div12 card" style="background: #1d1d1f;">
+            <div class="card-title">Visitas</div>
+            <div class="card-value">12.4k</div>
+            <span class="trend up">↑ 15.7%</span>
+        </div>
+
+        <div class="div13 card" style="background: #1d1d1f;">
+            <div class="card-title">Carrinhos</div>
+            <div class="card-value">847</div>
+            <span class="trend up">↑ 5.3%</span>
+        </div>
+
+        <div class="div14 card" style="background: #1d1d1f;">
+            <div class="card-title">Tempo Médio</div>
+            <div class="card-value">3m 42s</div>
+            <div class="card-subtitle">No site</div>
+        </div>
+
+        <div class="div15 card" style="background: #1d1d1f; padding: 14px;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 10px;">⚠️ Lista de Expulsão</div>
+            <div class="kick-list-container" id="kickListContainer">
+                <div class="kick-member-item">
+                    <div class="kick-member-info">
+                        <span class="kick-member-name">InactivePLayer</span>
+                        <span class="kick-member-reason">15 dias inativo</span>
+                    </div>
+                    <div class="kick-actions">
+                        <button class="kick-btn kick-btn-keep" onclick="keepMember(this)">✓</button>
+                        <button class="kick-btn kick-btn-remove" onclick="kickMember(this)">✕</button>
+                    </div>
+                </div>
+                <div class="kick-member-item">
+                    <div class="kick-member-info">
+                        <span class="kick-member-name">NoobGamer</span>
+                        <span class="kick-member-reason">Baixa contribuição</span>
+                    </div>
+                    <div class="kick-actions">
+                        <button class="kick-btn kick-btn-keep" onclick="keepMember(this)">✓</button>
+                        <button class="kick-btn kick-btn-remove" onclick="kickMember(this)">✕</button>
+                    </div>
+                </div>
+                <div class="kick-member-item">
+                    <div class="kick-member-info">
+                        <span class="kick-member-name">ToxicUser</span>
+                        <span class="kick-member-reason">Comportamento tóxico</span>
+                    </div>
+                    <div class="kick-actions">
+                        <button class="kick-btn kick-btn-keep" onclick="keepMember(this)">✓</button>
+                        <button class="kick-btn kick-btn-remove" onclick="kickMember(this)">✕</button>
+                    </div>
+                </div>
+            </div>
+            <button class="kick-add-btn" onclick="openKickModal()">
+                <span>+</span>
+                <span>Adicionar à Lista</span>
+            </button>
+        </div>
+
+        <!-- Modal Kick List -->
+        <div class="modal-overlay" id="kickModal" onclick="closeKickModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <span>Adicionar à Lista de Expulsão</span>
+                    <span class="modal-close" onclick="closeKickModal()">&times;</span>
+                </div>
+                <form class="modal-form" onsubmit="addToKickList(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nome do Membro</label>
+                        <input type="text" class="form-input" id="memberName" placeholder="Ex: InactivePlayer" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Motivo</label>
+                        <select class="form-select" id="kickReason" required>
+                            <option value="">Selecione o motivo</option>
+                            <option value="Inatividade">Inatividade</option>
+                            <option value="Baixa contribuição">Baixa contribuição</option>
+                            <option value="Comportamento tóxico">Comportamento tóxico</option>
+                            <option value="Não segue regras">Não segue regras</option>
+                            <option value="Ausência em eventos">Ausência em eventos</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="modal-btn modal-btn-cancel" onclick="closeKickModal()">Cancelar</button>
+                        <button type="submit" class="modal-btn modal-btn-submit">Adicionar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function openKickModal() {
+                document.getElementById('kickModal').classList.add('active');
+                document.getElementById('memberName').value = '';
+                document.getElementById('kickReason').value = '';
+                document.getElementById('memberName').focus();
+            }
+
+            function closeKickModal(event) {
+                if (!event || event.target.id === 'kickModal') {
+                    document.getElementById('kickModal').classList.remove('active');
+                }
+            }
+
+            function addToKickList(event) {
+                event.preventDefault();
+                
+                const name = document.getElementById('memberName').value.trim();
+                const reason = document.getElementById('kickReason').value;
+                
+                if (!name || !reason) return;
+                
+                const container = document.getElementById('kickListContainer');
+                
+                const newItem = document.createElement('div');
+                newItem.className = 'kick-member-item';
+                newItem.innerHTML = `
+                    <div class="kick-member-info">
+                        <span class="kick-member-name">${name}</span>
+                        <span class="kick-member-reason">${reason}</span>
+                    </div>
+                    <div class="kick-actions">
+                        <button class="kick-btn kick-btn-keep" onclick="keepMember(this)">✓</button>
+                        <button class="kick-btn kick-btn-remove" onclick="kickMember(this)">✕</button>
+                    </div>
+                `;
+                
+                container.appendChild(newItem);
+                
+                saveKickList();
+                closeKickModal();
+            }
+
+            function kickMember(btn) {
+                const item = btn.closest('.kick-member-item');
+                item.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    item.remove();
+                    saveKickList();
+                }, 300);
+            }
+
+            function keepMember(btn) {
+                const item = btn.closest('.kick-member-item');
+                item.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    item.remove();
+                    saveKickList();
+                }, 300);
+            }
+
+            function saveKickList() {
+                const items = [];
+                document.querySelectorAll('.kick-member-item').forEach(item => {
+                    const name = item.querySelector('.kick-member-name').textContent;
+                    const reason = item.querySelector('.kick-member-reason').textContent;
+                    items.push({ name, reason });
+                });
+                localStorage.setItem('kickList', JSON.stringify(items));
+            }
+
+            function loadKickList() {
+                const saved = localStorage.getItem('kickList');
+                if (saved) {
+                    const items = JSON.parse(saved);
+                    const container = document.getElementById('kickListContainer');
+                    container.innerHTML = '';
+                    
+                    items.forEach(item => {
+                        const newItem = document.createElement('div');
+                        newItem.className = 'kick-member-item';
+                        newItem.innerHTML = `
+                            <div class="kick-member-info">
+                                <span class="kick-member-name">${item.name}</span>
+                                <span class="kick-member-reason">${item.reason}</span>
+                            </div>
+                            <div class="kick-actions">
+                                <button class="kick-btn kick-btn-keep" onclick="keepMember(this)">✓</button>
+                                <button class="kick-btn kick-btn-remove" onclick="kickMember(this)">✕</button>
+                            </div>
+                        `;
+                        container.appendChild(newItem);
+                    });
+                }
+            }
+
+            // Carrega kick list ao iniciar
+            loadKickList();
+
+            // Fecha modal com ESC
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeKickModal();
+                }
+            });
+        </script>
+
+        <div class="div16 card" style="background: #1d1d1f; padding: 14px;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 10px;">⚱️ Altares da Guilda</div>
+            <div class="altar-container">
+                <div class="altar-item" data-altar="apollo" data-level="8">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Apollo</div>
+                            <div class="altar-attribute">Dano Mágico</div>
+                        </div>
+                        <span class="altar-level">Lvl 8</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 66.67%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('apollo')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="demeter" data-level="10">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Demeter</div>
+                            <div class="altar-attribute">HP Máximo</div>
+                        </div>
+                        <span class="altar-level">Lvl 10</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 83.33%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('demeter')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="hermes" data-level="7">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Hermes</div>
+                            <div class="altar-attribute">Velocidade de Movimento</div>
+                        </div>
+                        <span class="altar-level">Lvl 7</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 58.33%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('hermes')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="hephaestus" data-level="12">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Hephaestus</div>
+                            <div class="altar-attribute">Dano Físico</div>
+                        </div>
+                        <span class="altar-level max">Lvl 12</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill max" style="width: 100%;"></div>
+                        </div>
+                        <span class="altar-max-badge">MAX</span>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="hades" data-level="6">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Hades</div>
+                            <div class="altar-attribute">Penetração Mágica</div>
+                        </div>
+                        <span class="altar-level">Lvl 6</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 50%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('hades')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="dionysus" data-level="5">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Dionysus</div>
+                            <div class="altar-attribute">Regeneração de HP</div>
+                        </div>
+                        <span class="altar-level">Lvl 5</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 41.67%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('dionysus')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="aphrodite" data-level="12">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Aphrodite</div>
+                            <div class="altar-attribute">Taxa de Crítico</div>
+                        </div>
+                        <span class="altar-level max">Lvl 12</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill max" style="width: 100%;"></div>
+                        </div>
+                        <span class="altar-max-badge">MAX</span>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="hestia" data-level="8">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Hestia</div>
+                            <div class="altar-attribute">Defesa Mágica</div>
+                        </div>
+                        <span class="altar-level">Lvl 8</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 66.67%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('hestia')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="poseidon" data-level="9">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Poseidon</div>
+                            <div class="altar-attribute">Defesa Física</div>
+                        </div>
+                        <span class="altar-level">Lvl 9</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 75%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('poseidon')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="artemis" data-level="7">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Artemis</div>
+                            <div class="altar-attribute">Penetração Física</div>
+                        </div>
+                        <span class="altar-level">Lvl 7</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 58.33%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('artemis')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="godaltar" data-level="11">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">God Altar</div>
+                            <div class="altar-attribute">Absorção de Dano</div>
+                        </div>
+                        <span class="altar-level">Lvl 11</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 91.67%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('godaltar')">UP</button>
+                    </div>
+                </div>
+
+                <div class="altar-item" data-altar="footstone" data-level="4">
+                    <div class="altar-header">
+                        <div>
+                            <div class="altar-name">Guild Footstone</div>
+                            <div class="altar-attribute">Todos os Atributos</div>
+                        </div>
+                        <span class="altar-level">Lvl 4</span>
+                    </div>
+                    <div class="altar-progress-container">
+                        <div class="altar-progress-bar">
+                            <div class="altar-progress-fill" style="width: 33.33%;"></div>
+                        </div>
+                        <button class="altar-up-btn" onclick="upgradeAltar('footstone')">UP</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function upgradeAltar(altarId) {
+                const altarItem = document.querySelector(`[data-altar="${altarId}"]`);
+                let currentLevel = parseInt(altarItem.getAttribute('data-level'));
+                
+                if (currentLevel >= 12) return;
+                
+                currentLevel++;
+                altarItem.setAttribute('data-level', currentLevel);
+                
+                const levelBadge = altarItem.querySelector('.altar-level');
+                const progressFill = altarItem.querySelector('.altar-progress-fill');
+                const progressContainer = altarItem.querySelector('.altar-progress-container');
+                
+                // Atualiza o nível
+                levelBadge.textContent = `Lvl ${currentLevel}`;
+                
+                // Atualiza a barra de progresso (level/12 * 100)
+                const percentage = (currentLevel / 12) * 100;
+                progressFill.style.width = `${percentage}%`;
+                
+                // Se chegou no máximo
+                if (currentLevel === 12) {
+                    levelBadge.classList.add('max');
+                    progressFill.classList.add('max');
+                    
+                    // Remove botão UP e adiciona badge MAX
+                    const upBtn = altarItem.querySelector('.altar-up-btn');
+                    if (upBtn) {
+                        upBtn.remove();
+                        const maxBadge = document.createElement('span');
+                        maxBadge.className = 'altar-max-badge';
+                        maxBadge.textContent = 'MAX';
+                        progressContainer.appendChild(maxBadge);
+                    }
+                }
+                
+                // Salva no localStorage
+                saveAltarLevels();
+            }
+            
+            function saveAltarLevels() {
+                const altars = {};
+                document.querySelectorAll('[data-altar]').forEach(altar => {
+                    const id = altar.getAttribute('data-altar');
+                    const level = altar.getAttribute('data-level');
+                    altars[id] = level;
+                });
+                localStorage.setItem('altarLevels', JSON.stringify(altars));
+            }
+            
+            function loadAltarLevels() {
+                const saved = localStorage.getItem('altarLevels');
+                if (saved) {
+                    const altars = JSON.parse(saved);
+                    Object.keys(altars).forEach(altarId => {
+                        const level = parseInt(altars[altarId]);
+                        const altarItem = document.querySelector(`[data-altar="${altarId}"]`);
+                        if (altarItem && level !== parseInt(altarItem.getAttribute('data-level'))) {
+                            // Atualiza para o nível salvo
+                            altarItem.setAttribute('data-level', level);
+                            const levelBadge = altarItem.querySelector('.altar-level');
+                            const progressFill = altarItem.querySelector('.altar-progress-fill');
+                            const progressContainer = altarItem.querySelector('.altar-progress-container');
+                            
+                            levelBadge.textContent = `Lvl ${level}`;
+                            const percentage = (level / 12) * 100;
+                            progressFill.style.width = `${percentage}%`;
+                            
+                            if (level === 12) {
+                                levelBadge.classList.add('max');
+                                progressFill.classList.add('max');
+                                const upBtn = altarItem.querySelector('.altar-up-btn');
+                                if (upBtn) {
+                                    upBtn.remove();
+                                    const maxBadge = document.createElement('span');
+                                    maxBadge.className = 'altar-max-badge';
+                                    maxBadge.textContent = 'MAX';
+                                    progressContainer.appendChild(maxBadge);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+            
+            // Carrega níveis salvos ao iniciar
+            loadAltarLevels();
+        </script>
+
+        <div class="div17 card" style="padding: 14px; background: #1d1d1f;">
+            <div class="card-title" style="font-size: 11px; margin-bottom: 10px;">Blacklist</div>
+            <div class="blacklist-container" id="blacklistContainer">
+                <div class="blacklist-item">
+                    <span class="enemy-name">DarkSlayer99</span>
+                    <span class="separator">-</span>
+                    <span class="enemy-class champion">Champion</span>
+                    <button class="delete-btn" onclick="deleteEnemy(this)">X</button>
+                </div>
+                <div class="blacklist-item">
+                    <span class="enemy-name">ShadowKiller</span>
+                    <span class="separator">-</span>
+                    <span class="enemy-class mage">Mage</span>
+                    <button class="delete-btn" onclick="deleteEnemy(this)">X</button>
+                </div>
+                <div class="blacklist-item">
+                    <span class="enemy-name">BloodMage</span>
+                    <span class="separator">-</span>
+                    <span class="enemy-class mage">Mage</span>
+                    <button class="delete-btn" onclick="deleteEnemy(this)">X</button>
+                </div>
+                <div class="blacklist-item">
+                    <span class="enemy-name">DeathKnight</span>
+                    <span class="separator">-</span>
+                    <span class="enemy-class warrior">Warrior</span>
+                    <button class="delete-btn" onclick="deleteEnemy(this)">X</button>
+                </div>
+                <div class="blacklist-item">
+                    <span class="enemy-name">VenomArcher</span>
+                    <span class="separator">-</span>
+                    <span class="enemy-class champion">Champion</span>
+                    <button class="delete-btn" onclick="deleteEnemy(this)">X</button>
+                </div>
+                <div class="blacklist-item">
+                    <span class="enemy-name">HolyPriest</span>
+                    <span class="separator">-</span>
+                    <span class="enemy-class priest">Priest</span>
+                    <button class="delete-btn" onclick="deleteEnemy(this)">X</button>
+                </div>
+            </div>
+            <button class="blacklist-add-btn" onclick="openBlacklistModal()">
+                <span>+</span>
+                <span>Adicionar Inimigo</span>
+            </button>
+        </div>
+
+        <!-- Modal Blacklist -->
+        <div class="modal-overlay" id="blacklistModal" onclick="closeBlacklistModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <span>Adicionar à Blacklist</span>
+                    <span class="modal-close" onclick="closeBlacklistModal()">&times;</span>
+                </div>
+                <form class="modal-form" onsubmit="addToBlacklist(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nome do Inimigo</label>
+                        <input type="text" class="form-input" id="enemyName" placeholder="Ex: DarkSlayer99" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Classe</label>
+                        <select class="form-select" id="enemyClass" required>
+                            <option value="">Selecione a classe</option>
+                            <option value="champion">Champion</option>
+                            <option value="mage">Mage</option>
+                            <option value="warrior">Warrior</option>
+                            <option value="priest">Priest</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="modal-btn modal-btn-cancel" onclick="closeBlacklistModal()">Cancelar</button>
+                        <button type="submit" class="modal-btn modal-btn-submit">Adicionar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function openBlacklistModal() {
+                document.getElementById('blacklistModal').classList.add('active');
+                document.getElementById('enemyName').value = '';
+                document.getElementById('enemyClass').value = '';
+                document.getElementById('enemyName').focus();
+            }
+
+            function closeBlacklistModal(event) {
+                if (!event || event.target.id === 'blacklistModal') {
+                    document.getElementById('blacklistModal').classList.remove('active');
+                }
+            }
+
+            function addToBlacklist(event) {
+                event.preventDefault();
+                
+                const name = document.getElementById('enemyName').value.trim();
+                const classType = document.getElementById('enemyClass').value;
+                
+                if (!name || !classType) return;
+                
+                const container = document.getElementById('blacklistContainer');
+                
+                const newItem = document.createElement('div');
+                newItem.className = 'blacklist-item';
+                newItem.innerHTML = `
+                    <span class="enemy-name">${name}</span>
+                    <span class="separator">-</span>
+                    <span class="enemy-class ${classType}">${classType.charAt(0).toUpperCase() + classType.slice(1)}</span>
+                    <button class="delete-btn" onclick="deleteEnemy(this)">X</button>
+                `;
+                
+                container.appendChild(newItem);
+                
+                saveBlacklist();
+                closeBlacklistModal();
+            }
+
+            function deleteEnemy(btn) {
+                btn.parentElement.remove();
+                saveBlacklist();
+            }
+
+            function saveBlacklist() {
+                const items = [];
+                document.querySelectorAll('.blacklist-item').forEach(item => {
+                    const name = item.querySelector('.enemy-name').textContent;
+                    const classType = item.querySelector('.enemy-class').className.split(' ').pop();
+                    items.push({ name, class: classType });
+                });
+                localStorage.setItem('blacklist', JSON.stringify(items));
+            }
+
+            function loadBlacklist() {
+                const saved = localStorage.getItem('blacklist');
+                if (saved) {
+                    const items = JSON.parse(saved);
+                    const container = document.getElementById('blacklistContainer');
+                    container.innerHTML = '';
+                    
+                    items.forEach(item => {
+                        const newItem = document.createElement('div');
+                        newItem.className = 'blacklist-item';
+                        newItem.innerHTML = `
+                            <span class="enemy-name">${item.name}</span>
+                            <span class="separator">-</span>
+                            <span class="enemy-class ${item.class}">${item.class.charAt(0).toUpperCase() + item.class.slice(1)}</span>
+                            <button class="delete-btn" onclick="deleteEnemy(this)">X</button>
+                        `;
+                        container.appendChild(newItem);
+                    });
+                }
+            }
+
+            // Carrega blacklist ao iniciar
+            loadBlacklist();
+
+            // Fecha modal com ESC
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeBlacklistModal();
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

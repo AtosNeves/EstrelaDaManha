@@ -1,0 +1,105 @@
+
+<div class="parent">
+    <div class="div1">1</div>
+    <div class="div2">2</div>
+    <div class="div6">6</div>
+    <div class="div7">7</div>
+    <div class="div8">8</div>
+    <div class="div9">9</div>
+    <div class="div10">10</div>
+    <div class="div11">11</div>
+    <div class="div12">12</div>
+    <div class="div13">13</div>
+    <div class="div20">20</div>
+    <div class="div21">21</div>
+    <div class="div22">22</div>
+    <div class="div23">23</div>
+</div>
+    
+    
+.parent {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    gap: 8px;
+}
+    
+.div1 {
+    grid-column: span 5 / span 5;
+}
+
+.div2 {
+    grid-row: span 8 / span 8;
+    grid-row-start: 2;
+}
+
+.div6 {
+    grid-row: span 2 / span 2;
+    grid-row-start: 2;
+}
+
+.div7 {
+    grid-row: span 2 / span 2;
+    grid-row-start: 2;
+}
+
+.div8 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 2;
+    grid-row-start: 4;
+}
+
+.div9 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 3;
+    grid-row-start: 4;
+}
+
+.div10 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 5;
+    grid-row-start: 4;
+}
+
+.div11 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 4;
+    grid-row-start: 2;
+}
+
+.div12 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 2;
+    grid-row-start: 6;
+}
+
+.div13 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 3;
+    grid-row-start: 6;
+}
+
+.div20 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 4;
+    grid-row-start: 4;
+}
+
+.div21 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 5;
+    grid-row-start: 2;
+}
+
+.div22 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 4;
+    grid-row-start: 6;
+}
+
+.div23 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 5;
+    grid-row-start: 6;
+}
+        
